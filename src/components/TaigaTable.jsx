@@ -50,7 +50,9 @@ const TaigaTable = () => {
                     </Td>
                     <Td>{story.created_date}</Td>
                     <Td>{story.priority}</Td>
-                    <Td>{story.status}</Td>
+                    <Td color={story.status && story.status_extra_info ? story.status_extra_info.color : null}>
+                      {story.status && story.status_extra_info ? story.status_extra_info.name : null}
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>

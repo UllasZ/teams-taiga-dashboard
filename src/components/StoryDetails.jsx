@@ -56,7 +56,10 @@ const StoryDetails = ({ storyId, onBack }) => {
                       {task.subject}
                     </Button>
                   </Td>
-                  <Td>{task.status}</Td>
+
+                  <Td color={task.status && task.status_extra_info ? task.status_extra_info.color : null}>
+                    {task.status && task.status_extra_info ? task.status_extra_info.name : null}
+                    </Td>
                 </Tr>
               ))}
             </Tbody>

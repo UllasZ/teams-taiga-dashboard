@@ -8,7 +8,7 @@ const MessageSimulator = () => {
 
   const handleSend = async () => {
     try {
-      const res = await api.post('teams/webhook', { message });
+      const res = await api.post('teams/simulate', { message });
       setResponse(res.data);
     } catch (err) {
       setResponse({ error: 'Something went wrong' });
