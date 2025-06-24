@@ -1,19 +1,42 @@
 import React, { useState } from 'react';
-import { Box, Input, Button, Text, VStack } from '@chakra-ui/react';
+import { Box, Input, Button, VStack, useToast } from '@chakra-ui/react';
+
 import api from '../services/api';
 
-const MessageSimulator = () => {
-  const [message, setMessage] = useState('');
-  const [response, setResponse] = useState(null);
+const MessageSimulator = ({ onMessageSent }) => {
 
-  const handleSend = async () => {
-    try {
-      const res = await api.post('teams/simulate', { message });
-      setResponse(res.data);
-    } catch (err) {
-      setResponse({ error: 'Something went wrong' });
-    }
-  };
+  const toast = useToast();
+
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+const handleSend = async () => {
+  setLoading(true);
+  try {
+    const res = await api.post('teams/simulate', { message });
+    toast({
+      title: 'Message processed',
+      description: res.data.message || 'Task successfully created or updated.',
+      status: 'success',
+      duration: 4000,
+      isClosable: true,
+      position: 'top',
+    });
+    setMessage('');
+    if (onMessageSent) onMessageSent();
+  } catch (err) {
+    toast({
+      title: 'Error',
+      description: err.response?.data?.detail || 'Something went wrong.',
+      status: 'error',
+      duration: 4000,
+      isClosable: true,
+      position: 'top',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Box p={4} bg="white" borderRadius="md" boxShadow="md">
@@ -22,16 +45,17 @@ const MessageSimulator = () => {
           placeholder="Type a Teams message here..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          isDisabled={loading}
         />
-        <Button colorScheme="blue" onClick={handleSend}>Send</Button>
-        {response && (
-          <Box bg="gray.50" p={3} borderRadius="md" w="100%">
-            <Text fontWeight="bold">Response:</Text>
-            <Text fontSize="sm" whiteSpace="pre-wrap">
-              {response.message}
-            </Text>
-          </Box>
-        )}
+        <Button
+          colorScheme="blue"
+          onClick={handleSend}
+          isDisabled={!message.trim() || loading}
+          isLoading={loading}
+          loadingText="Sending..."
+        >
+          Send
+        </Button>
       </VStack>
     </Box>
   );

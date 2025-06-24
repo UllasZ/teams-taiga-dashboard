@@ -5,17 +5,18 @@ import {
 import api from '../services/api';
 import StoryDetails from './StoryDetails';
 
-const TaigaTable = () => {
+const TaigaTable = ({refresh}) => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStoryId, setSelectedStoryId] = useState(null);
 
-  useEffect(() => {
-    api.get('teams/user_stories')
-      .then((res) => setStories(res.data))
-      .catch(() => setStories([]))
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  setLoading(true);
+  api.get('teams/user_stories')
+    .then(res => setStories(res.data))
+    .catch(() => setStories([]))
+    .finally(() => setLoading(false));
+}, [refresh]);
 
   return (
     <Box mt={8}>
@@ -31,7 +32,6 @@ const TaigaTable = () => {
                   <Th>ID</Th>
                   <Th>Title</Th>
                   <Th>Created Date</Th>
-                  <Th>Priority</Th>
                   <Th>Status</Th>
                 </Tr>
               </Thead>
@@ -49,7 +49,6 @@ const TaigaTable = () => {
                       </Button>
                     </Td>
                     <Td>{story.created_date}</Td>
-                    <Td>{story.priority}</Td>
                     <Td color={story.status && story.status_extra_info ? story.status_extra_info.color : null}>
                       {story.status && story.status_extra_info ? story.status_extra_info.name : null}
                     </Td>

@@ -18,9 +18,11 @@ const SubTaskDetails = ({ taskId, onBack }) => {
   return (
     <Box>
       <Button mb={4} onClick={onBack}>← Back to Subtasks</Button>
-      <Heading size="lg">{task.title}</Heading>
+      <Heading size="lg">{task.subject}</Heading>
       <Text mt={2}>{task.description || "No description available."}</Text>
-      <Text mt={2}>Status: {task.status}</Text>
+      <Text color={task.status && task.status_extra_info ? task.status_extra_info.color : null}>
+        Status: {task.status && task.status_extra_info ? task.status_extra_info.name : null}
+      </Text>
     </Box>
   );
 };
