@@ -56,10 +56,10 @@ teams-taiga-dashboard/
 ```bash
 git clone https://github.com/UllasZ/teams-taiga-dashboard.git
 cd teams-taiga-dashboard
+```
 
 ```bash
 yarn install
-
 ```
 Visit: http://localhost:3004
 
